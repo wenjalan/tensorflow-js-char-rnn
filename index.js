@@ -2,7 +2,7 @@ const tf = require('@tensorflow/tfjs-node');
 const fs = require("fs/promises");
 
 // model parameters
-const SEQUENCE_LENGTH = 50;
+const SEQUENCE_LENGTH = 30;
 const LSTM_UNITS = 128;
 
 // file parameters
@@ -11,8 +11,8 @@ const MODEL_DIRECTORY = 'file://./model/';
 const BUNDLE_DIRECTORY = './model/bundle.json';
 
 // training parameters
-const TRAIN_EPOCHS = 50;
-const TRAIN_BATCHES = 50;
+const TRAIN_EPOCHS = 10;
+const TRAIN_BATCHES = 20;
 
 // main
 async function start() {
@@ -25,19 +25,18 @@ async function start() {
 
     // create a model
     const model = createModel(metadata.numExamples, metadata.charSetSize);
+    model.summary();
 
     // train the model
-    model.fit(trainXs, trainYs, {
+    await model.fit(trainXs, trainYs, {
         epochs: TRAIN_EPOCHS,
         batchSize: TRAIN_BATCHES,
     });
 
     // save the model and bundle to disk
     await model.save(MODEL_DIRECTORY);
-    const bundle = {
-        // todo: include bundle data
-    };
-    await fs.writeFile(BUNDLE_DIRECTORY, JSON.stringify(bundle));
+    await fs.writeFile(BUNDLE_DIRECTORY, JSON.stringify(metadata));
+    console.log('Saved model');
 }
 
 // returns a model to fit data to
@@ -145,6 +144,8 @@ async function getTrainingData(corpus) {
         numExamples: examples.length,
         charSetSize: charSet.size,
         sequenceLength: SEQUENCE_LENGTH,
+        charToId: charToId,
+        idToChar: idToChar,
     };
 
     // return
