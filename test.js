@@ -5,9 +5,9 @@ const MODEL_DIRECTORY = 'file://./model/model.json';
 const BUNDLE_DIRECTORY = './model/bundle.json';
 
 const SAMPLE_SENTENCE = 'fox socks box knox knox in box fox in socks knox on fox in socks in box socks on knox and knox in box fox in socks on box on knox';
-const SAMPLE_OFFSET = 20;
-const N_SAMPLES = 100;
-const TEMPERATURE = 0.3;
+const SAMPLE_OFFSET = 10;
+const N_SAMPLES = 500;
+const TEMPERATURE = 0.7;
 
 async function test() {
     // load model from disk

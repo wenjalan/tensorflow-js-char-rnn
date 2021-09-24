@@ -2,7 +2,7 @@ const tf = require('@tensorflow/tfjs-node');
 const fs = require("fs/promises");
 
 // model parameters
-const SEQUENCE_LENGTH = 30;
+const SEQUENCE_LENGTH = 50;
 const LSTM_UNITS = 128;
 
 // file parameters
@@ -11,7 +11,7 @@ const MODEL_DIRECTORY = 'file://./model/';
 const BUNDLE_DIRECTORY = './model/bundle.json';
 
 // training parameters
-const TRAIN_EPOCHS = 10;
+const TRAIN_EPOCHS = 50;
 const TRAIN_BATCHES = 20;
 
 // main
@@ -49,6 +49,11 @@ function createModel(nExamples, charSetSize) {
         inputShape: [SEQUENCE_LENGTH, charSetSize],
         units: LSTM_UNITS,
         returnSequences: true,
+    }));
+
+    // dropout
+    model.add(tf.layers.dropout({
+        rate: 0.2,
     }));
 
     // flatten
